@@ -2,12 +2,13 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { signin, signout, useSession, getProviders } from "next-auth/react";
+import { signin, signout, useSession, getProviders, signIn } from "next-auth/react";
 
 const Nav = () => {
-  const isUserloggeIn = true;
+  const { data: session } = useSession()
   const [providers, setproviders] = useState(null);
   const [toggleDropdown, settoggleDropdown] = useState(false)
+  
 
   useEffect(() => {
     const setProviders = async () => {
@@ -29,7 +30,7 @@ const Nav = () => {
         <p className="logo_text">Promptopia</p>
       </Link>
       <div className="sm:flex hidden">
-        {isUserloggeIn ? (
+        {session ? (
           <div className="flex gap-3 md:gap-5">
             <Link href="create-prompt" className="black_btn">
               Create Post
@@ -54,7 +55,7 @@ const Nav = () => {
                 <button
                   type="button"
                   key={provider.name}
-                  onClick={() => sign(provider.id)}
+                  onClick={() => signIn(provider.id)}
                   className="black_btn"
                 >
                   Sign in
@@ -65,7 +66,7 @@ const Nav = () => {
       </div>
       {/* mobile navigation */}
       <div className="sm:hidden flex relative">
-        {isUserloggeIn ? (
+        {session ? (
           <div className="flex">
             <Image
               src="/assets/images/logo.svg"
@@ -95,7 +96,7 @@ const Nav = () => {
                 <button
                   type="button"
                   key={provider.name}
-                  onClick={() => sign(provider.id)}
+                  onClick={() => signIn(provider.id)}
                   className="black_btn"
                 >
                   Sign in
